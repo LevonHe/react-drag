@@ -1,0 +1,73 @@
+.iot-layout {
+  height: 100%;
+
+  .jarvis-logo {
+    display: block;
+    padding: 16px;
+    height: 64px;
+    background-color: #192129;
+
+    .logoImg {
+      height: 32px;
+    }
+  }
+
+  .jarvis-header {
+    padding: 0;
+    background: #fff;
+    box-shadow: 0 0 12px -2px rgba(0, 0, 0, 0.1);
+    .jarvis-trigger {
+      float: left;
+      padding: 0 24px;
+      font-size: 18px;
+      line-height: 64px;
+      cursor: pointer;
+      transition: color, 0.3s;
+      &:hover {
+        color: #ea4505;
+      }
+    }
+
+    .jarvis-dropdown {
+      float: right;
+      padding: 0 24px;
+    }
+    .jarvis-dropdown-link {
+      color: rgba(0, 0, 0, 0.65);
+    }
+    .jarvis-icon {
+      margin-right: 5px;
+    }
+    .jarvis-username {
+      display: inline-block;
+      max-width: 160px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      vertical-align: middle;
+    }
+  }
+
+  .jarvis-content {
+    width: 100%;
+    overflow: auto;
+    background-color: #ececec;
+
+    .jarvis-container {
+      padding: 0 30px 20px;
+      min-width: 970px;
+      min-height: 360px;
+      color: #333;
+      background-color: #ececec;
+    }
+  }
+  .jarvis-footer {
+    height: 42px;
+    background-color: #fff;
+    text-align: center;
+    font-size: 12px;
+    line-height: 42px;
+    padding: 0;
+    color: #808080;
+  }
+}

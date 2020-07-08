@@ -1,0 +1,40 @@
+.jarvis-valid-text {
+  display: inline-block;
+  .valid-text-item-required {
+    color: #f14938;
+    vertical-align: middle;
+  }
+  .valid-text-item-not-required {
+    color: #fff;
+    vertical-align: middle;
+    opacity: 0;
+  }
+  .jarvis-valid-text-item {
+    width: 180px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    background-color: #fff;
+    background-image: none;
+    border-radius: 4px;
+    border: 1px solid #dcdfe6;
+    box-sizing: border-box;
+    appearance: none;
+    color: #606266;
+    display: inline-block;
+    height: 32px;
+    line-height: 24px;
+    outline: 0;
+    padding: 4px 11px;
+    margin: 5px;
+    transition: border-color 0.2s cubic-bezier(0.645, 0.045, 0.355, 1);
+    vertical-align: middle;
+    &:hover {
+      border-color: #c0c4cc;
+    }
+    &:focus {
+      border-color: #409eff;
+      outline: 0;
+    }
+  }
+}
