@@ -1,4 +1,5 @@
 import * as _ from 'lodash';
+
 /**
  * @description 路径转化成数组
  * @param {*} pathStr
@@ -26,7 +27,7 @@ export const isPathOrCom = (pathIndex) => {
  * @param {*} data 原data
  */
 export const swap = (newIndex, oldIndex, data) => {
-  let temp = data[newIndex];
+  const temp = data[newIndex];
   data[newIndex] = data[oldIndex];
   data[oldIndex] = temp;
 };
@@ -38,7 +39,7 @@ export const swap = (newIndex, oldIndex, data) => {
  * @param {*} dragItem 需要添加的元素
  */
 export const itemAdd = (newIndex, data, dragItem) => {
-  let newindexarr = indexToArray(newIndex);
+  const newindexarr = indexToArray(newIndex);
   const first = newindexarr.shift();
   let parent = data;
   if (newindexarr.length > 0) {
@@ -63,7 +64,7 @@ export const itemAdd = (newIndex, data, dragItem) => {
  */
 export const itemRemove = (oldIndex, data) => {
   const oldIndexArr = indexToArray(oldIndex);
-  let first = oldIndexArr.shift();
+  const first = oldIndexArr.shift();
   let parent = data;
   if (oldIndexArr.length > 0) {
     parent = parent[first];
@@ -104,7 +105,7 @@ export const getDragItem = (oldIndex, data) => {
  */
 export const UpdateItem = (newIndex, oldIndex, data, parentPath) => {
   const parentArr = indexToArray(parentPath);
-  let first = parentArr.shift();
+  const first = parentArr.shift();
   let parent = data;
   if (parentArr.length > 0) {
     parent = data[first];
@@ -112,17 +113,17 @@ export const UpdateItem = (newIndex, oldIndex, data, parentPath) => {
       parent = parent.children[item];
     });
     swap(newIndex, oldIndex, parent.children);
+    return data;
+  }
+  // 第一层
+  if (!isNaN(first)) {
+    // 有一层父级元素，first不为NaN
+    parent = data[first];
+    swap(newIndex, oldIndex, parent.children);
   } else {
-    // 第一层
-    if (!isNaN(first)) {
-      // 有一层父级元素，first不为NaN
-      parent = data[first];
-      swap(newIndex, oldIndex, parent.children);
-    } else {
-      // 最外层 parentArr为null，first为NaN
-      parent = data;
-      swap(newIndex, oldIndex, parent);
-    }
+    // 最外层 parentArr为null，first为NaN
+    parent = data;
+    swap(newIndex, oldIndex, parent);
   }
   return data;
 };
@@ -135,9 +136,8 @@ export const findItemObject = (componetList, name) => {
   const componentItem = componetList.filter((item) => {
     if (item.type === name) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   });
   return componentItem[0];
 };
@@ -149,7 +149,7 @@ export const findItemObject = (componetList, name) => {
  * @param {*} dragItem 点击的item
  */
 export const itemUpdateInfo = (newIndex, data, dragItem) => {
-  let newindexarr = indexToArray(newIndex);
+  const newindexarr = indexToArray(newIndex);
   const first = newindexarr.shift();
   let parent = data;
   if (newindexarr.length > 0) {
@@ -176,7 +176,7 @@ export const itemUpdateInfo = (newIndex, data, dragItem) => {
 export const itemCopy = (oldIndex, data, dragItem) => {
   const oldIndexArr = indexToArray(oldIndex);
   const len = oldIndexArr.length;
-  let newIndexArr = oldIndexArr;
+  const newIndexArr = oldIndexArr;
   // 得到新的Index
   newIndexArr[len - 1] = newIndexArr[len - 1] + 1;
   const newIndex = newIndexArr.join('-');
@@ -188,9 +188,7 @@ export const itemCopy = (oldIndex, data, dragItem) => {
  * @description 是组件模版还是组件
  * @param {*} name
  */
-export const isTempOrCom = (name) => {
-  return name.indexOf('com-') > -1;
-};
+export const isTempOrCom = (name) => name.indexOf('com-') > -1;
 
 /**
  * @description 找到组件模版的code

@@ -39,6 +39,11 @@ export default {
     copyright1: 'Copyright © ',
     copyright2: ' LevonHe',
   },
+  application: {
+    accept: '同意',
+    reject: '拒绝',
+    pending: '申请中',
+  },
   errorCode: {
     '000': '网络异常',
     '400': '无效请求',

@@ -16,11 +16,11 @@ export class JarvisLayout extends React.Component {
   }
 
   changeLocale = (e) => {
-    const lang = CookieService.getCookie('_lang');
+    const lang = CookieService.getCookie('lang');
     if (lang && lang === e.key) {
       return;
     }
-    CookieService.setCookie('_lang', e.key, 1);
+    CookieService.setCookie('lang', e.key, 1);
     window.location.reload(true);
   };
 

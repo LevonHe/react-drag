@@ -1,16 +1,13 @@
 import * as _ from 'lodash';
-import Layout from './features/layout/Layout';
 import PageNotFound from './features/common/PageNotFound';
-import dragViewRoute from './features/dragView/route';
-
-const childRoutes = [dragViewRoute];
+import dragView from './features/dragView/DragView';
 
 const routes = [
   {
     path: '/',
-    component: Layout,
+    component: dragView,
     // canActive: true,
-    childRoutes: [...childRoutes, { path: '*', name: 'Page not found', component: PageNotFound }].filter(
+    childRoutes: [{ path: '*', name: 'Page not found', component: PageNotFound }].filter(
       (r) => r.component || (r.childRoutes && r.childRoutes.length > 0)
     ),
   },

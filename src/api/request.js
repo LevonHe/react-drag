@@ -16,13 +16,8 @@ const service = axios.create({
 // request interceptors
 service.interceptors.request.use(
   (config) => {
-    if (
-      config.url.indexOf('login') === -1 &&
-      config.url.indexOf('verification_code') === -1 &&
-      config.url.indexOf('register') === -1 &&
-      config.url.indexOf('forget_credential') === -1
-    ) {
-      const token = CookieService.getCookie('_token');
+    if (config.url.indexOf('login') === -1) {
+      const token = CookieService.getCookie('token');
       if (!token) {
         config.url = '';
         window.location.href = window.location.protocol + '//' + window.location.host + '/login';
@@ -37,14 +32,7 @@ service.interceptors.request.use(
 // response interceptors
 service.interceptors.response.use(
   (response) => {
-    let res = {};
-    // 物模型导出
-    if (response.config.url.includes('/features/export')) {
-      res.responseHeader = response.headers['content-disposition'];
-      res.data = response.data;
-    } else {
-      res = response.data;
-    }
+    const res = response.data;
     if (
       response.status !== 200 &&
       res.status !== 200 &&

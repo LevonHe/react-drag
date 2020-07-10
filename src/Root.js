@@ -1,7 +1,6 @@
 import React from 'react';
-import { Switch, Route, Router, Redirect } from 'react-router-dom';
+import { Switch, Route, Redirect, BrowserRouter } from 'react-router-dom';
 import intl from 'react-intl-universal';
-import history from './store/history';
 import en_US from './locales/en-US';
 import zh_CN from './locales/zh-CN';
 import CookieService from './util/CookieService';
@@ -13,8 +12,8 @@ const locales = {
 };
 
 const currentLocale = intl.determineLocale({
-  urlLocaleKey: '_lang',
-  cookieLocaleKey: '_lang',
+  urlLocaleKey: 'lang',
+  cookieLocaleKey: 'lang',
 });
 
 function renderRouteConfigV3(routes, contextPath) {
@@ -36,7 +35,7 @@ function renderRouteConfigV3(routes, contextPath) {
           key={newContextPath}
           render={(props) =>
             item.canActive ? (
-              CookieService.getCookie('_token') ? (
+              CookieService.getCookie('token') ? (
                 <item.component {...props}>{childRoutes}</item.component>
               ) : (
                 <Redirect to="/dragView"></Redirect>
@@ -54,7 +53,7 @@ function renderRouteConfigV3(routes, contextPath) {
           key={newContextPath}
           render={(props) =>
             item.canActive ? (
-              CookieService.getCookie('_token') ? (
+              CookieService.getCookie('token') ? (
                 <item.component {...props}></item.component>
               ) : (
                 <Redirect to="/dragView"></Redirect>
@@ -102,6 +101,6 @@ export default class Root extends React.Component {
 
   render() {
     const children = renderRouteConfigV3(this.props.routeConfig, '/');
-    return this.state.initDone && <Router history={history}>{children}</Router>;
+    return this.state.initDone && <BrowserRouter>{children}</BrowserRouter>;
   }
 }

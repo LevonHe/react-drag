@@ -13,10 +13,10 @@ import './assets/styles/index.less';
 import 'moment/locale/zh-cn';
 
 // 设置antd组件的全局国际化
-let lang = CookieService.getCookie('_lang');
+let lang = CookieService.getCookie('lang');
 if (!lang || !['zh-CN', 'en-US'].includes(lang)) {
   lang = 'zh-CN';
-  CookieService.setCookie('_lang', 'zh-CN', 1);
+  CookieService.setCookie('lang', 'zh-CN', 1);
 }
 
 let lan;

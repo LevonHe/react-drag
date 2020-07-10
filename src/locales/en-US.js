@@ -39,6 +39,11 @@ export default {
     copyright1: 'Copyright © ',
     copyright2: ' LevonHe',
   },
+  application: {
+    accept: 'Accept',
+    reject: 'Reject',
+    pending: 'Pending',
+  },
   errorCode: {
     '000': 'Internet error',
     '400': 'Bad request',

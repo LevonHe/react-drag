@@ -1,11 +1,15 @@
 // 租户类型
-export const testTypes = [
+export const APPLICATION_TYPE = [
   {
-    key: 'ADD',
-    value: 'common.add',
+    key: 'ACCEPT',
+    value: 'application.accept',
   },
   {
-    key: 'DELETE',
-    value: 'common.delete',
+    key: 'REJECT',
+    value: 'application.reject',
+  },
+  {
+    key: 'PENDING',
+    value: 'application.pending',
   },
 ];

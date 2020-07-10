@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 import { connect } from 'dva';
 import { Input, Select, Button, Modal, Form, Collapse, Spin, Switch } from 'antd';
-import _ from 'lodash';
+import * as _ from 'lodash';
 import { itemUpdateInfo, itemRemove, itemCopy } from '@/util/utils';
 import defaultPng from '@/assets/components/button.png';
 import html2Canvas from 'html2canvas';
+import ColorPicker from './ColorPicker';
 
 const { Option } = Select;
 const { Panel } = Collapse;
@@ -23,10 +24,11 @@ const Config = (props) => {
   const config = isPage ? pageConfig : componentConfig;
   const currentView = isPage ? currentPageView : currentComponentView;
 
-  const setCurrentView = (newData) => {
+  // 具有副作用的dispatch
+  const setCurrentView = (payload) => {
     dispatch({
       type: 'drag/setCurrentView',
-      payload: newData,
+      payload,
       isPage,
     });
   };
@@ -49,6 +51,9 @@ const Config = (props) => {
 
   // 配置项的渲染组件
   const renderConfig = (data, type) => {
+    if (!data) {
+      return;
+    }
     if (JSON.stringify(data) !== '[]' && data) {
       return data.map((item, index) => (
         <Panel header={item.text} key={item.text}>
@@ -81,6 +86,7 @@ const Config = (props) => {
         valueInfo = valueInfo[value];
       }
     } else {
+      // reactNodeInfo
       const valuearr = value.split('.');
       const key = valuearr[0];
       const params = valuearr[1];
@@ -120,11 +126,11 @@ const Config = (props) => {
       return (
         <div style={{ display: 'flex' }}>
           <span>{title}</span>
-          <Color
+          <ColorPicker
             color={valueInfo}
             style={{ width: '50%' }}
             onChange={(color) => changeValueParent(propsType, color, value)}
-          ></Color>
+          ></ColorPicker>
         </div>
       );
     }
@@ -290,6 +296,7 @@ const Config = (props) => {
       renderFunction(base64, width, height, (img) => {
         const blob = convertBase64UrlToBlob(base64);
         setImgBlob(blob);
+        console.log('img', img);
         if (img) {
           setImgSrc(img.src);
           setImgLoading(false);
@@ -308,20 +315,28 @@ const Config = (props) => {
    * @param {*} e
    */
   const submitForm = () => {
-    const {
-      form: { validateFields },
-    } = props;
-    validateFields(async (err, value) => {
-      if (!err) {
-        const resfilePath = await ploadFile();
-        const payload = {
-          ...value,
-          comCode: config.dragItem,
-          filePath: resfilePath,
-        };
-        // dispatch setTemplateList getOwnTemplate
-        hideModal();
+    const { form } = props;
+    form.validateFields(async (err, value) => {
+      if (err) {
+        return;
       }
+      const resfilePath = await uploadFile();
+      const payload = {
+        ...value,
+        comCode: config.dragItem,
+        filePath: resfilePath,
+      };
+      // dispatch setTemplateList getOwnTemplate
+      await dispatch({
+        type: 'drag/setTemplateList',
+        payload,
+      });
+
+      await dispatch({
+        type: 'drag/getOwnTemplate',
+      });
+
+      hideModal();
     });
   };
 
@@ -329,6 +344,10 @@ const Config = (props) => {
     const formData = new FormData();
     formData.append('image', imgBlob, 'image.png');
     // dispatch uploadFile
+    return dispatch({
+      type: 'components/uploadFile',
+      payload: formData,
+    });
   };
 
   const handleChange = (value) => {
@@ -349,8 +368,8 @@ const Config = (props) => {
         </Button>
       ) : null}
       <Collapse defaultActiveKey={['样式', '主题', '文字内容']}>
-        {config && config.propsConfig && renderConfig(config.propsConfig, 'props')}
-        {config && config.nodePropsConfig && renderConfig(config.nodePropsConfig, 'reactNodeProps')}
+        {config && renderConfig(config.propsConfig, 'props')}
+        {config && renderConfig(config.nodePropsConfig, 'reactNodeProps')}
       </Collapse>
       {isPage ? (
         <Modal

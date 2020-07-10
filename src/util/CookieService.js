@@ -25,7 +25,7 @@ const CookieService = {
    * @param {} domain 域
    * @param {} secure 安全标志
    */
-  setCookie(name, value, expires, path, domain, secure) {
+  setCookie(name, value, expires = 1, path = '/', domain, secure) {
     let cookieText = encodeURIComponent(name) + '=' + encodeURIComponent(value);
     if (expires instanceof Date) {
       cookieText += '; expires=' + expires.toUTCString();
@@ -55,7 +55,7 @@ const CookieService = {
    * @param {} domain 域
    * @param {} secure 安全标志
    */
-  delCookie(name, path, domain, secure) {
+  delCookie(name, path = '/', domain, secure) {
     this.setCookie(name, '', new Date(0), path, domain, secure);
   },
 };

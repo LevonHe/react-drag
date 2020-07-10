@@ -22,7 +22,7 @@ const withDialog = (WrappedComponent) => {
     }
 
     // 弹窗组件国际化
-    let lang = CookieService.getCookie('_lang');
+    let lang = CookieService.getCookie('lang');
     if (!lang || !['zh-CN', 'en-US'].includes(lang)) {
       lang = 'zh-CN';
     }

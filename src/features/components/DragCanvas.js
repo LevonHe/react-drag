@@ -1,7 +1,7 @@
 import React from 'react';
 import Sortable from 'react-sortablejs';
 import { connect } from 'dva';
-import _ from 'lodash';
+import * as _ from 'lodash';
 import { Button, Tag, NavBar, Icon, InputItem, SearchBar, Result } from 'antd-mobile';
 import {
   UpdateItem,
@@ -27,6 +27,20 @@ const sortOptions = {
     put: true,
   },
 };
+
+const comData = [
+  {
+    type: 'div',
+    nested: true,
+    props: {
+      style: {
+        border: '1px solid red',
+        width: '200px',
+      },
+    },
+    children: [],
+  },
+];
 
 const GlobalComponent = {
   Button,
@@ -59,10 +73,10 @@ const DragCanvas = (props) => {
   const currentView = isPage ? currentPageView : currentComponentView;
   const selectIndex = isPage ? pageSelectIndex : componentSelectIndex;
 
-  const setCurrentView = (newData) => {
+  const setCurrentView = (payload) => {
     dispatch({
       type: 'drag/setCurrentView',
-      payload: newData,
+      payload,
       isPage,
     });
   };
@@ -75,8 +89,11 @@ const DragCanvas = (props) => {
     });
   };
 
+  // 拖拽的排序方法，同级拖曳
   const onUpdate = (evt) => {
+    // 交换数组
     const { newIndex, oldIndex } = evt;
+    // 父节点路径
     const parentPath = evt.path[1].getAttribute('data-id');
     const oldData = _.cloneDeep(currentView);
     const newData = UpdateItem(newIndex, oldIndex, oldData, parentPath);
@@ -86,7 +103,8 @@ const DragCanvas = (props) => {
 
   const onAddItem = (evt) => {
     const startIndex = evt.newIndex;
-    const comNameOrPath = evt.clone.dataset.id; // 得到拖拽元素或者路径
+    // 得到拖拽元素或者路径
+    const comNameOrPath = evt.clone.dataset.id;
     const parentPath = evt.path[1].getAttribute('data-id');
     const newIndex = parentPath ? `${parentPath}-${startIndex}` : startIndex;
     const oldData = _.cloneDeep(currentView);
@@ -141,9 +159,8 @@ const DragCanvas = (props) => {
     const config = componentFromList.config;
     const reactNodeConfig = componentFromList.reactNodeConfig;
 
-    // 村drag相关的payload
+    // 存drag相关的payload
     const payload = {
-      // ...props.drag.config,
       dragItem,
       arrIndex,
       propsInfo: info,
@@ -151,6 +168,7 @@ const DragCanvas = (props) => {
       nodePropsInfo: reactNodeInfo,
       nodePropsConfig: reactNodeConfig,
     };
+
     setConfig(payload);
   };
 
@@ -158,12 +176,14 @@ const DragCanvas = (props) => {
     data.map((item, i) => {
       // index
       const indexs = index === '' ? String(i) : `${index}-${i}`;
+
       // 选中时的class
       const isSelectClass = {
         border: '1px dashed red',
       };
       const isSelect = indexs === selectIndex ? isSelectClass : {};
       const selectClass = indexs === selectIndex ? 'selectDrag' : 'unselectDrag';
+
       // 渲染，有子元素的嵌套的
       if (item.children) {
         const { props: style = {} } = item;
@@ -204,8 +224,7 @@ const DragCanvas = (props) => {
       if (item.nodeProps) {
         const nodeProps = item.nodeProps;
         Object.keys(nodeProps).forEach((key) => {
-          // eslint-disable-next-line
-          const func = eval('(' + nodeProps[key].renderFunc + ')');
+          const func = JSON.parse(nodeProps[key].renderFunc);
           const params = nodeProps[key].params;
           const reactDomParams = func(params);
           const domContent = renderReactDom(reactDomParams);
