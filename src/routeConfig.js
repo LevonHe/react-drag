@@ -1,13 +1,30 @@
 import * as _ from 'lodash';
-import PageNotFound from './features/common/PageNotFound';
-import dragView from './features/dragView/DragView';
+import PageNotFound from './features/pageNotFound/PageNotFound';
+import Layout from './features/layout/Layout';
+import DragRoute from './features/drag/route';
+import ComponentDragRoute from './features/componentDrag/route';
+import ComSquareRoute from './features/componentSuqare/route';
+import OrgSquareRoute from './features/organizationSquare/route';
+import CodeViewRoute from './features/codeView/route';
+import Login from './features/login/Login';
+import Register from './features/login/Register';
+
+const childRoutes = [DragRoute, ComponentDragRoute, ComSquareRoute, OrgSquareRoute, CodeViewRoute];
 
 const routes = [
   {
+    path: '/login',
+    component: Login,
+  },
+  {
+    path: '/register',
+    component: Register,
+  },
+  {
     path: '/',
-    component: dragView,
+    component: Layout,
     // canActive: true,
-    childRoutes: [{ path: '*', name: 'Page not found', component: PageNotFound }].filter(
+    childRoutes: [...childRoutes, { path: '*', name: 'Page not found', component: PageNotFound }].filter(
       (r) => r.component || (r.childRoutes && r.childRoutes.length > 0)
     ),
   },

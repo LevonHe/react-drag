@@ -38,7 +38,7 @@ function renderRouteConfigV3(routes, contextPath) {
               CookieService.getCookie('token') ? (
                 <item.component {...props}>{childRoutes}</item.component>
               ) : (
-                <Redirect to="/dragView"></Redirect>
+                <Redirect to="/drag"></Redirect>
               )
             ) : (
               <item.component {...props}>{childRoutes}</item.component>
@@ -56,7 +56,7 @@ function renderRouteConfigV3(routes, contextPath) {
               CookieService.getCookie('token') ? (
                 <item.component {...props}></item.component>
               ) : (
-                <Redirect to="/dragView"></Redirect>
+                <Redirect to="/drag"></Redirect>
               )
             ) : (
               <item.component {...props}></item.component>

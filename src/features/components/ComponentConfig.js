@@ -108,17 +108,19 @@ const Config = (props) => {
       return (
         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
           <span>{title}</span>
-          <Select
-            defaultValue={valueInfo}
-            style={{ width: '50%' }}
-            onChange={(v) => changeValueParent(propsType, v, value)}
-          >
-            {data.map((item, index) => (
-              <Option value={item.value} key={index}>
-                {item.text}
-              </Option>
-            ))}
-          </Select>
+          {data && data.length && (
+            <Select
+              defaultValue={valueInfo}
+              style={{ width: '50%' }}
+              onChange={(v) => changeValueParent(propsType, v, value)}
+            >
+              {data.map((item, index) => (
+                <Option value={item.value} key={index}>
+                  {item.text}
+                </Option>
+              ))}
+            </Select>
+          )}
         </div>
       );
     }
@@ -410,7 +412,7 @@ const Config = (props) => {
                     rules: [{ required: true, message: '请选择所属组织' }],
                   })(
                     <Select mode="multiple" style={{ width: '100%' }} placeholder="请选择组件所公开属于的组织">
-                      {orgArr.length && orgArr.map((item) => <Option key={item}>{item}</Option>)}
+                      {orgArr && orgArr.length && orgArr.map((item) => <Option key={item}>{item}</Option>)}
                     </Select>
                   )}
                 </Form.Item>

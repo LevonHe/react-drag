@@ -14,8 +14,8 @@ import {
   findTempCode,
   findItemObject,
 } from '@/util/utils';
-import componentList from '../dragView/config';
-import './drag.less';
+import componentList from '../drag/config';
+import './DragCanvas.less';
 
 const sortOptions = {
   animation: 150,

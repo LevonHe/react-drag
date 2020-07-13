@@ -1,4 +1,5 @@
 import React from 'react';
+import './PageNotFound.less';
 
 export default class PageNotFound extends React.PureComponent {
   render() {

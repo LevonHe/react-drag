@@ -1,0 +1,21 @@
+.component-square {
+  display: flex;
+  -webkit-box-flex: 1;
+  flex-grow: 1;
+  height: 100%;
+  .edit-region {
+    display: flex;
+    -webkit-box-flex: 1;
+    flex-grow: 1;
+    width: 0px;
+    margin-left: 0px;
+    transition: all 0.5s ease 0s;
+    padding: 40px;
+    .drag-region {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: #fff;
+    }
+  }
+}

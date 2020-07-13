@@ -1,7 +1,7 @@
 import React from 'react';
 import Sortable from 'react-sortablejs';
 import _ from 'lodash';
-import componentList from '../dragView/config';
+import componentList from '../drag/config';
 
 const sortOptions = {
   group: {
