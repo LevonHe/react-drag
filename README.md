@@ -1,5 +1,7 @@
 # react-drag
 
+感谢 https://github.com/daisybaicai/react-drag
+
 react react-router dva dva-model-persist
 
 ## 开发步骤：
