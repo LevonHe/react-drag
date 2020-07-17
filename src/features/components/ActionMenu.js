@@ -6,101 +6,6 @@ import MsgService from '@/util/MsgService';
 import './ActionMenu.less';
 
 class ActionMenu extends React.Component {
-  getMenu = () => {
-    const { active, dispatch, currentView, componentView, match, history } = this.props;
-    console.log(this.props);
-    const { params } = match;
-    const {
-      location: { pathname },
-    } = history;
-
-    const viewMenu = [
-      {
-        title: '页面编辑',
-        type: 'url',
-        url: '/drag',
-        icon: 'highlight',
-      },
-      {
-        title: '组件广场',
-        type: 'url',
-        url: '/comsquare',
-        icon: 'appstore',
-      },
-      {
-        title: '组织广场',
-        type: 'url',
-        url: '/org',
-        icon: 'team',
-      },
-      {
-        title: '保存页面',
-        type: 'request',
-        icon: 'check-circle',
-        render: () => {
-          dispatch({
-            type: 'drag/putPageCode',
-            payload: { code: currentView },
-          });
-        },
-        includes: ['/drag'],
-        excludes: ['/codePreview', '/org', 'comsquare'],
-      },
-      {
-        title: '代码预览',
-        url: '/codePreview',
-        icon: 'sync',
-        type: 'url',
-        excludes: ['/org', '/comsquare'],
-      },
-    ];
-
-    const componentMenu = [
-      {
-        title: '组件编辑',
-        type: 'url',
-        icon: 'highlight',
-        url: '/componentDrag',
-      },
-      {
-        title: '组件广场',
-        type: 'url',
-        url: '/comsquare',
-        icon: 'appstore',
-      },
-      {
-        title: '保存到服务器',
-        type: 'request',
-        icon: 'check-circle',
-        render() {
-          if (this.componentValidator(componentView)) {
-            dispatch({
-              type: 'drag/putComponentCode',
-              payload: {
-                id: params.id,
-                code: componentView,
-              },
-            });
-          }
-        },
-      },
-    ];
-
-    const menu = pathname.includes('component') ? componentMenu : viewMenu;
-
-    const filterMenu = menu.filter((item) => {
-      let flag = true;
-      if (item.includes) {
-        flag = item.includes.includes(active);
-      }
-      if (item.exclude) {
-        flag = !item.excludes.includes(active);
-      }
-      return flag;
-    });
-    return filterMenu;
-  };
-
   // 组件判断方法，组件不能为空
   componentValidator = (componentView) => {
     if (componentView.length === 0) {
@@ -143,6 +48,100 @@ class ActionMenu extends React.Component {
       onClick() {},
     });
     return false;
+  };
+
+  getMenu = () => {
+    const { active, dispatch, currentView, componentView, location, history } = this.props;
+
+    const {
+      location: { pathname },
+    } = history;
+
+    const viewMenu = [
+      {
+        title: '页面编辑',
+        type: 'url',
+        url: '/drag',
+        icon: 'highlight',
+      },
+      {
+        title: '组件广场',
+        type: 'url',
+        url: '/comsquare',
+        icon: 'appstore',
+      },
+      {
+        title: '组织广场',
+        type: 'url',
+        url: '/org',
+        icon: 'team',
+      },
+      {
+        title: '保存页面',
+        type: 'request',
+        icon: 'check-circle',
+        render: () => {
+          dispatch({
+            type: 'drag/putPageCode',
+            payload: { code: currentView },
+          });
+        },
+        includes: ['/drag'],
+        excludes: ['/codeView', '/org', 'comsquare'],
+      },
+      {
+        title: '代码预览',
+        url: '/codeView',
+        icon: 'sync',
+        type: 'url',
+        excludes: ['/org', '/comsquare'],
+      },
+    ];
+
+    const componentMenu = [
+      {
+        title: '组件编辑',
+        type: 'url',
+        icon: 'highlight',
+        url: '/componentDrag',
+      },
+      {
+        title: '组件广场',
+        type: 'url',
+        url: '/comsquare',
+        icon: 'appstore',
+      },
+      {
+        title: '保存到服务器',
+        type: 'request',
+        icon: 'check-circle',
+        render: () => {
+          if (this.componentValidator(componentView)) {
+            dispatch({
+              type: 'drag/putComponentCode',
+              payload: {
+                id: pathname.split('/')[1],
+                code: componentView,
+              },
+            });
+          }
+        },
+      },
+    ];
+
+    const menu = pathname.includes('component') ? componentMenu : viewMenu;
+
+    const filterMenu = menu.filter((item) => {
+      let flag = true;
+      if (item.includes) {
+        flag = item.includes.includes(active);
+      }
+      if (item.exclude) {
+        flag = !item.excludes.includes(active);
+      }
+      return flag;
+    });
+    return filterMenu;
   };
 
   handleUrl = (url) => {

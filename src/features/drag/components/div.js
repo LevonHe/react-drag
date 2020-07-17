@@ -5,8 +5,9 @@ export default {
   nested: true,
   props: {
     style: {
-      // border: '1px solid black',
-      height: '100px',
+      border: '1px solid black',
+      padding: '1px',
+      minHeight: '100px',
       width: '',
       marginTop: '',
     },

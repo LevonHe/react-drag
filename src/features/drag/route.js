@@ -4,5 +4,5 @@ export default {
   path: 'drag',
   name: 'drag',
   component: WithLoadable(() => import('./Drag')),
-  // canActive: true,
+  canActive: true,
 };

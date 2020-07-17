@@ -52,7 +52,7 @@ export default {
         MsgService.error(response.msg);
       }
     },
-    // 获取当前用户的componetCode
+    // 获取用户当前组件的componetCode
     * getComponentCode({ payload }, { call, put }) {
       const response = yield call(getComponentCode, payload.id);
       if (response && response.code === 200) {
@@ -65,16 +65,17 @@ export default {
         MsgService.error(response.msg);
       }
     },
-    // 更新当前用户的componentCode
+    // 更新用户当前组件的componentCode
     * putComponentCode({ payload }, { call, put }) {
       const { id, code } = payload;
-      const response = yield call(putComponentCode, { code: code[0] }, id);
+      const response = yield call(putComponentCode, id, { code: code[0] });
       if (response) {
-        MsgService.success('res', response);
+        MsgService.success(response.msg);
       } else {
         MsgService.error(response.msg);
       }
     },
+    // 设置页面配置
     * setCurrentView({ payload, isPage }, { put }) {
       if (isPage) {
         yield put({ type: 'saveCurrentView', payload });
@@ -82,6 +83,7 @@ export default {
         yield put({ type: 'saveComponentView', payload });
       }
     },
+    // 删除当前页面的某个组件
     * removeCurrentView({ payload, isPage }, { put }) {
       if (isPage) {
         yield put({ type: 'saveCurrentView', payload });
@@ -91,6 +93,7 @@ export default {
         yield put({ type: 'clearComArrIndex' });
       }
     },
+    // 保存当前的页面配置 code
     * setConfig({ payload, isPage }, { put }) {
       if (isPage) {
         yield put({ type: 'saveConfig', payload });
@@ -98,6 +101,7 @@ export default {
         yield put({ type: 'saveComponentConfig', payload });
       }
     },
+    // 将组件提交后台保存
     * setTemplateList({ payload }, { call, put }) {
       const response = yield call(createComponent, payload);
       if (response && response.code === 200) {
@@ -106,7 +110,7 @@ export default {
         MsgService.error(response.msg);
       }
     },
-    // 获取可用组件
+    // 获取个人可用组件
     * getOwnTemplate(_, { call, put }) {
       const response = yield call(getOwnTemplate);
       if (response && response.code === 200) {

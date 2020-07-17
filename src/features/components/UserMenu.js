@@ -1,18 +1,16 @@
 import React from 'react';
 import { connect } from 'dva';
+import { withRouter } from 'react-router-dom';
 import { Dropdown, Menu, Icon } from 'antd';
+import CookieService from '@/util/CookieService';
 
 const UserMenu = (props) => {
   const onMenuClick = (evt) => {
     const { key } = evt;
-    const { dispatch } = props;
 
     if (key === 'logout') {
-      if (dispatch) {
-        dispatch({
-          type: 'user/logout',
-        });
-      }
+      CookieService.delCookie('Drag-Token');
+      props.history.replace('/login');
     }
   };
 
@@ -33,4 +31,4 @@ const UserMenu = (props) => {
   );
 };
 
-export default connect(() => ({}))(UserMenu);
+export default connect(() => ({}))(withRouter(UserMenu));

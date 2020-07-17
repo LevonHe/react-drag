@@ -4,14 +4,13 @@ import _ from 'lodash';
 import { connect } from 'dva';
 
 const sortOptions = {
-  animation: 150,
-  fallbackOnBody: true,
-  swapThreshold: 0.65,
   group: {
     name: 'formItem',
-    pll: 'clone',
+    pull: 'clone',
     put: false,
   },
+  sort: false,
+  draggable: '.item',
 };
 
 const TemplateList = (props) => {

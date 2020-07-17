@@ -212,3 +212,10 @@ export const renderPropsToString = (template, params) => {
   });
   return res;
 };
+
+//
+export const imgRenderFunc = ({ icon, color }) => ({
+  antd: true,
+  componentName: 'Icon',
+  props: { type: icon, style: { fill: color }, className: 'spe', size: 'lg' },
+});

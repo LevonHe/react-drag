@@ -16,13 +16,13 @@ const service = axios.create({
 // request interceptors
 service.interceptors.request.use(
   (config) => {
-    if (config.url.indexOf('login') === -1) {
-      const token = CookieService.getCookie('token');
+    if (config.url.indexOf('login') === -1 && config.url.indexOf('register') === -1) {
+      const token = CookieService.getCookie('Drag-Token');
       if (!token) {
         config.url = '';
         window.location.href = window.location.protocol + '//' + window.location.host + '/login';
       }
-      config.headers.Authorization = token;
+      config.headers.Authorization = 'Bearer ' + token;
     }
     return config;
   },

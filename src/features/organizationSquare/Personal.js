@@ -39,69 +39,70 @@ const Personal = (props) => {
         orgDescription: value.orgDescription,
       };
       dispatch({
-        type: 'organization/createOrginzation',
+        type: 'organization/createOrganization',
         payload,
-      }).then((res) => {
-        'organization/getPersonalOrganizationList';
+      }).then(() => {
+        hideModal();
+        dispatch({
+          type: 'organization/getPersonalOrganizationList',
+        });
       });
     });
-    hideModal();
   };
 
   return (
     <div>
-      <div>
-        <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <Button type="primary" onClick={createOrginzation}>
-            创建组织
-          </Button>
-        </div>
-        <List
-          itemLayout="vertical"
-          size="large"
-          pagination={{ pageSize: 2 }}
-          dataSource={orgList}
-          renderItem={(item) => (
-            <List.Item
-              key={item.org_name}
-              actions={[<RenderIcon item={item} />]}
-              extra={
-                <img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />
-              }
-            >
-              <List.Item.Meta title={<a>{item.org_name}</a>} description={item.org_description} />
-            </List.Item>
-          )}
-        ></List>
-        <Modal
-          width="50%"
-          title="创建组织"
-          visible={visible}
-          onOk={submitForm}
-          onCancel={hideModal}
-          okText="确认"
-          cancelText="取消"
-        >
-          <div>
-            <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }}>
-              <Form.Item label="组织名称">
-                {getFieldDecorator('orgName', {
-                  rules: [{ required: true, message: '请输入组件名称' }],
-                })(<Input />)}
-              </Form.Item>
-              <Form.Item label="组织描述">
-                {getFieldDecorator('orgDescription', {
-                  rules: [{ required: true, message: '请输入组织描述' }],
-                })(<TextArea />)}
-              </Form.Item>
-            </Form>
-          </div>
-        </Modal>
+      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+        <Button type="primary" onClick={createOrginzation}>
+          创建组织
+        </Button>
       </div>
+      <List
+        itemLayout="vertical"
+        size="large"
+        pagination={{ pageSize: 2 }}
+        dataSource={orgList}
+        renderItem={(item) => (
+          <List.Item
+            key={item.org_name}
+            actions={[<RenderIcon item={item} />]}
+            extra={
+              <img width={272} alt="logo" src="https://gw.alipayobjects.com/zos/rmsportal/mqaQswcyDLcXyDKnZfES.png" />
+            }
+          >
+            <List.Item.Meta title={<a>{item.org_name}</a>} description={item.org_description} />
+          </List.Item>
+        )}
+      ></List>
+      <Modal
+        width="50%"
+        title="创建组织"
+        visible={visible}
+        onOk={submitForm}
+        onCancel={hideModal}
+        okText="确认"
+        cancelText="取消"
+        destroyOnClose={true}
+      >
+        <div>
+          <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }}>
+            <Form.Item label="组织名称">
+              {getFieldDecorator('orgName', {
+                rules: [{ required: true, message: '请输入组件名称' }],
+              })(<Input />)}
+            </Form.Item>
+            <Form.Item label="组织描述">
+              {getFieldDecorator('orgDescription', {
+                rules: [{ required: true, message: '请输入组织描述' }],
+              })(<TextArea />)}
+            </Form.Item>
+          </Form>
+        </div>
+      </Modal>
     </div>
   );
 };
 
 export default connect(({ organization }) => ({
-  orgList: organization.myList,
-}))(Form.create(Personal));
+  orgList: organization.mylist,
+}))(Form.create()(Personal));

@@ -15,6 +15,7 @@ export default {
     mylist: [],
   },
   effects: {
+    // 创建组织，每个用户都可以创建组织
     * createOrganization({ payload }, { call, put }) {
       const response = yield call(createOrganization, payload);
       if (response) {

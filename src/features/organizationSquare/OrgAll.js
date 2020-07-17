@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import intl from 'react-intl-universal';
 import { List } from 'antd';
 import { connect } from 'dva';
 import { APPLICATION_TYPE } from '@/util/businessTypes';
@@ -30,12 +31,14 @@ const OrgAll = (props) => {
   const RenderIcon = ({ item }) => {
     const status = item.user_status;
     if (status === 'true') {
-      return <span>已在组织</span>;
+      return <span style={{ cursor: 'text' }}>已在组织</span>;
     }
     if (item.apply_status === null) {
-      return <span onClick={() => apply(item)}>申请加入</span>;
+      return <a onClick={() => apply(item)}>申请加入</a>;
     }
-    return <span>{APPLICATION_TYPE[item.apply_status]}</span>;
+    const st = APPLICATION_TYPE.find((i) => i.key === item.apply_status);
+    const value = st ? intl.get(st.value) : item.apply_status;
+    return <span style={{ cursor: 'text' }}>{value}</span>;
   };
 
   return (
@@ -44,7 +47,7 @@ const OrgAll = (props) => {
         <List
           itemLayout="vertical"
           size="large"
-          pagination={{ pageSize: 2 }}
+          pagination={{ pageSize: 5 }}
           dataSource={orgList}
           renderItem={(item) => (
             <List.Item

@@ -13,6 +13,7 @@ import {
   isTempOrCom,
   findTempCode,
   findItemObject,
+  imgRenderFunc,
 } from '@/util/utils';
 import componentList from '../drag/config';
 import './DragCanvas.less';
@@ -156,8 +157,8 @@ const DragCanvas = (props) => {
     info = dragItem.props;
     reactNodeInfo = dragItem.nodeProps;
     const componentFromList = findItemObject(componentList, dragItem.type);
-    const config = componentFromList.config;
-    const reactNodeConfig = componentFromList.reactNodeConfig;
+    const config = componentFromList.config || [];
+    const reactNodeConfig = componentFromList.reactNodeConfig || [];
 
     // 存drag相关的payload
     const payload = {
@@ -224,7 +225,8 @@ const DragCanvas = (props) => {
       if (item.nodeProps) {
         const nodeProps = item.nodeProps;
         Object.keys(nodeProps).forEach((key) => {
-          const func = JSON.parse(nodeProps[key].renderFunc);
+          // const func = JSON.parse(nodeProps[key].renderFunc);
+          const func = imgRenderFunc;
           const params = nodeProps[key].params;
           const reactDomParams = func(params);
           const domContent = renderReactDom(reactDomParams);
@@ -237,6 +239,10 @@ const DragCanvas = (props) => {
         ...item.props,
         ...ReactNodeProps,
       };
+      // 兼容 button 的 icon 图标为空时，有icon占位符的问题
+      if (Object.prototype.hasOwnProperty.call(props, 'icon') && props.icon === '') {
+        delete props.icon;
+      }
       if (selectClass) {
         props = {
           ...props,
@@ -268,8 +274,8 @@ const DragCanvas = (props) => {
   return (
     <div
       style={{
-        width: '375px',
-        height: '667px',
+        width: '500px',
+        height: '700px',
         backgroundColor: 'white',
         margin: '20px',
       }}

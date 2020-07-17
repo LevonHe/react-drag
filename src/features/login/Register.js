@@ -49,7 +49,7 @@ const Register = (props) => {
               <Button type="primary" htmlType="submit" onClick={submitRegister} className="btn">
                 注册
               </Button>
-              <NavLink to="/login" class="link">
+              <NavLink to="/login" className="link">
                 登录
               </NavLink>
             </Form>

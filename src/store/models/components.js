@@ -10,6 +10,7 @@ export default {
     filePath: '',
   },
   effects: {
+    // 获取个人组件
     * getPersonalComponents(_, { call, put }) {
       const response = yield call(getPersonalComponents);
       if (response && response.code === 200) {
@@ -21,6 +22,7 @@ export default {
         MsgService.error(response.msg);
       }
     },
+    // 获取公共组件
     * getPublicComponents(_, { call, put }) {
       const response = yield call(getPublicComponents);
       if (response && response.code === 200) {
@@ -32,6 +34,7 @@ export default {
         MsgService.error(response.msg);
       }
     },
+    // 获取组织组件
     * getOrganizationComponents(_, { call, put }) {
       const response = yield call(getOrganizationComponents);
       if (response && response.code === 200) {
@@ -43,6 +46,7 @@ export default {
         MsgService.error(response.msg);
       }
     },
+    // 上传组件图片（htmltocanvas）
     * uploadFile({ payload }, { call, put }) {
       const response = yield call(uploadFiles, payload);
       if (response && response.code === 200) {
@@ -50,7 +54,7 @@ export default {
           type: 'saveFileImg',
           payload: response.data.filename,
         });
-        return payload;
+        return response.data.filename;
       }
       MsgService.error(response.msg);
     },

@@ -4,5 +4,5 @@ export default {
   path: 'comsquare',
   name: 'comsquare',
   component: WithLoadable(() => import('./ComponentSquare')),
-  // canActive: true,
+  canActive: true,
 };

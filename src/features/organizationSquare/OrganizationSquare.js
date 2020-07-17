@@ -4,6 +4,7 @@ import { Tabs } from 'antd';
 import OrgAll from './OrgAll';
 import Personal from './Personal';
 import Application from './Application';
+import './OrganizationSquare.less';
 
 const { TabPane } = Tabs;
 

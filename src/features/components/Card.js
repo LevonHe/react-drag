@@ -23,7 +23,7 @@ const Card = (props) => {
   };
 
   const PageJumpToDetail = () => {
-    this.props.history.push(`/${id}/componentDrag`);
+    props.history.push(`/${id}/componentDrag`);
   };
 
   return (
@@ -37,12 +37,12 @@ const Card = (props) => {
       </div>
       <div>
         <div className="operation-container">
-          <span onClick={PageJumpToDetail}>更新</span>
-          <span onClick={showModal}>预览</span>
-          <span>设置</span>
+          <a onClick={PageJumpToDetail}>更新</a>
+          <a onClick={showModal}>预览</a>
+          <a>设置</a>
         </div>
-        <Modal visible={visible} onOk={handleOk} onCancel={handleCancel} footer={null}>
-          <div>
+        <Modal title={com_name} visible={visible} onOk={handleOk} onCancel={handleCancel} footer={null}>
+          <div style={{ textAlign: 'center' }}>
             <img style={{ width: '400px' }} src={file_path} />
           </div>
         </Modal>

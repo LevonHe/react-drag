@@ -35,10 +35,10 @@ function renderRouteConfigV3(routes, contextPath) {
           key={newContextPath}
           render={(props) =>
             item.canActive ? (
-              CookieService.getCookie('token') ? (
+              CookieService.getCookie('Drag-Token') ? (
                 <item.component {...props}>{childRoutes}</item.component>
               ) : (
-                <Redirect to="/drag"></Redirect>
+                <Redirect to="/login"></Redirect>
               )
             ) : (
               <item.component {...props}>{childRoutes}</item.component>
@@ -53,10 +53,10 @@ function renderRouteConfigV3(routes, contextPath) {
           key={newContextPath}
           render={(props) =>
             item.canActive ? (
-              CookieService.getCookie('token') ? (
+              CookieService.getCookie('Drag-Token') ? (
                 <item.component {...props}></item.component>
               ) : (
-                <Redirect to="/drag"></Redirect>
+                <Redirect to="/login"></Redirect>
               )
             ) : (
               <item.component {...props}></item.component>

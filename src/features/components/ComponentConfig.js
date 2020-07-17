@@ -56,7 +56,7 @@ const Config = (props) => {
     }
     if (JSON.stringify(data) !== '[]' && data) {
       return data.map((item, index) => (
-        <Panel header={item.text} key={item.text}>
+        <Panel header={item.text} key={item.text + index}>
           <div key={index}>
             <div>
               {item.children.map((item, idx) => (
@@ -231,6 +231,7 @@ const Config = (props) => {
    * @description 删除组件
    */
   const removeComponent = () => {
+    if (config.arrIndex === 0 || config.arrIndex === '0') return;
     const newData = itemRemove(config.arrIndex, _.cloneDeep(currentView));
     // 发送请求
     removeCurrentView(newData);
@@ -253,7 +254,7 @@ const Config = (props) => {
     img.crossOrigin = '';
     // 保证图片加载完毕后再返回
     img.onload = () => {
-      cb && cb();
+      cb && cb(img);
     };
   };
 
@@ -272,13 +273,13 @@ const Config = (props) => {
     const bytes = window.atob(urlData.split(',')[1]); // 取消url的头，并转换为byte
 
     // 处理异常，将ASCII码小于0的转换为大于0
-    const ab = new ArrayBuffer(bytes.length);
-    const ia = new Uint8Array(ab);
+    const UnicodeArr = new Array(bytes.length);
     for (let i = 0; i < bytes.length; i += 1) {
-      ia[i] = bytes.charCodeAt(i);
+      UnicodeArr[i] = bytes.charCodeAt(i);
     }
+    const unit8 = new Uint8Array(UnicodeArr);
 
-    return new Blob([ab], { type: mime });
+    return new Blob([unit8], { type: mime });
   };
 
   /**
@@ -298,7 +299,6 @@ const Config = (props) => {
       renderFunction(base64, width, height, (img) => {
         const blob = convertBase64UrlToBlob(base64);
         setImgBlob(blob);
-        console.log('img', img);
         if (img) {
           setImgSrc(img.src);
           setImgLoading(false);
@@ -361,7 +361,12 @@ const Config = (props) => {
       <Button onClick={copyComponent} icon="copy" size="small">
         复制组件
       </Button>
-      <Button onClick={removeComponent} icon="delete" size="small">
+      <Button
+        onClick={removeComponent}
+        icon="delete"
+        size="small"
+        disabled={config.arrIndex === 0 || config.arrIndex === '0'}
+      >
         删除组件
       </Button>
       {isPage ? (
@@ -382,6 +387,7 @@ const Config = (props) => {
           onCancel={hideModal}
           okText="确认"
           cancelText="取消"
+          destroyOnClose={true}
         >
           <div>
             <Form labelCol={{ span: 4 }} wrapperCol={{ span: 14 }}>

@@ -76,7 +76,7 @@ export default {
             { text: 'right', value: 'right' },
             { text: 'ellipsis', value: 'ellipsis' },
             { text: 'loading', value: 'loading' },
-            { text: '无', value: false },
+            { text: '无', value: '' },
           ],
         },
       ],

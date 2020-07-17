@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Tabs, Icon } from 'antd';
 import { connect } from 'dva';
 import ComponentList from '../components/ComponentList';
@@ -20,6 +20,21 @@ const Drag = (props) => {
   const handleMouseLeave = () => {
     setComListHidden(true);
   };
+
+  useEffect(() => {
+    // 查询当前的 currentView
+    dispatch({
+      type: 'drag/getPageCode',
+    });
+    // 查询当前的 组织列表
+    dispatch({
+      type: 'organization/getOrgArr',
+    });
+    // 查询当前用户的可用组件列表
+    dispatch({
+      type: 'drag/getOwnTemplate',
+    });
+  }, []);
 
   return (
     <div className="drag-content">

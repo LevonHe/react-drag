@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { connect } from 'dva';
 import { Icon, Tabs } from 'antd';
 import ComponentList from '../components/ComponentList';
@@ -9,6 +9,9 @@ import '../drag/Drag.less';
 const { TabPane } = Tabs;
 
 const View = (props) => {
+  const { dispatch, componentView, match } = props;
+  const { params } = match;
+
   const [comListHidden, setComListHidden] = useState(false);
 
   const handleMouseEnter = () => {
@@ -18,6 +21,15 @@ const View = (props) => {
   const handleMouseLeave = () => {
     setComListHidden(true);
   };
+
+  useEffect(() => {
+    dispatch({
+      type: 'drag/getComponentCode',
+      payload: {
+        id: params.id,
+      },
+    });
+  }, []);
 
   return (
     <div className="drag-content">

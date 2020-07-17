@@ -42,7 +42,7 @@ export default {
   application: {
     accept: 'Accept',
     reject: 'Reject',
-    pending: 'Pending',
+    pending: 'Pending...',
   },
   errorCode: {
     '000': 'Internet error',

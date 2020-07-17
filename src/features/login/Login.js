@@ -45,7 +45,7 @@ const Login = (props) => {
               <Button type="primary" htmlType="submit" onClick={submitForm} className="btn">
                 登录
               </Button>
-              <NavLink to="/register" class="link">
+              <NavLink to="/register" className="link">
                 注册
               </NavLink>
             </Form>

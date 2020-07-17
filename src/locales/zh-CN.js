@@ -42,7 +42,7 @@ export default {
   application: {
     accept: '同意',
     reject: '拒绝',
-    pending: '申请中',
+    pending: '申请中...',
   },
   errorCode: {
     '000': '网络异常',

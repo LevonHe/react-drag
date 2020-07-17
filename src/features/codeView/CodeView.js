@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
+import { Modal } from 'antd';
 import MonacoEditor from 'react-monaco-editor';
 import { connect } from 'dva';
 import * as _ from 'lodash';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Button, Tag, NavBar, Icon, InputItem, SearchBar, Result } from 'antd-mobile';
-import { renderPropsToString } from '@/util/utils';
+import { renderPropsToString, imgRenderFunc } from '@/util/utils';
 import MsgService from '@/util/MsgService';
 import './CodeView.less';
 
@@ -19,7 +20,7 @@ const GlobalComponent = {
 };
 
 const codeView = (props) => {
-  const { dispatch, currentView } = props;
+  const { currentView } = props;
 
   const [code, setCode] = useState('');
   const [modalVisible, setModalVisible] = useState(false);
@@ -52,25 +53,23 @@ const codeView = (props) => {
   const renderJSONToJSX = () => {
     const arr = dependComponents();
     const dependCom = arr.length > 0 ? `import { Icon, ${arr.join(', ')}} from 'antd-mobile';` : '';
-    return `
-    import React, { Component } from 'react';
-    ${dependCom}
+    return `import React, { Component } from 'react';
+${dependCom}
 
-    class Index extends Component {
-      constructor() {
-        super();
-      }
-      render() {
-        return (
-          <>
-           ${renderDom(currentView, 0)}
-          </>
-        )
-      }
-    }
+class Index extends Component {
+  constructor() {
+    super();
+  }
+  render() {
+    return (
+      <>
+        ${renderDom(currentView, 0)}
+      </>
+    )
+  }
+}
 
-    export default Index;
-    `;
+export default Index;`;
   };
 
   // 渲染jsx dom
@@ -79,15 +78,21 @@ const codeView = (props) => {
     data.map((item) => {
       if (item.children) {
         result += `<${item.type} ${renderStyle(item.props.style)}>
-        ${renderDom(item.children, 1)}</${item.type}>`;
+          ${renderDom(item.children, 1)}
+        </${item.type}>
+        `;
       } else {
         const { props, nodeProps } = item;
         if (flag) {
-          result += `    <${item.type}${renderProps(props)} ${renderNodeProps(nodeProps)} ${renderStyle(props.style)}>
-          ${props.content ? props.content : ''}</${item.type}>`;
+          result += `
+          <${item.type}${renderProps(props)} ${renderNodeProps(nodeProps)} ${renderStyle(props.style)}>
+            ${props.content ? props.content : ''}
+          </${item.type}>`;
         } else {
-          result += `<${item.type}${renderProps(props)} ${renderNodeProps(nodeProps)} ${renderStyle(props.style)}>
-          ${props.content ? props.content : ''}</${item.type}>`;
+          result += `
+          <${item.type}${renderProps(props)} ${renderNodeProps(nodeProps)} ${renderStyle(props.style)}>
+            ${props.content ? props.content : ''}
+          </${item.type}>`;
         }
       }
     });
@@ -96,6 +101,9 @@ const codeView = (props) => {
 
   // 渲染props
   const renderProps = (props) => {
+    if ([undefined, null].includes(props)) {
+      return '';
+    }
     let propsResult = '';
     Object.keys(props).forEach((key) => {
       if (key !== 'style' && key !== 'content') {
@@ -108,6 +116,9 @@ const codeView = (props) => {
 
   // 渲染谈nodeProps
   const renderNodeProps = (props) => {
+    if ([undefined, null].includes(props)) {
+      return '';
+    }
     let nodePropsResult = '';
     Object.keys(props).forEach((key) => {
       const value = props[key];
@@ -120,6 +131,9 @@ const codeView = (props) => {
 
   // 渲染style
   const renderStyle = (style) => {
+    if ([undefined, null].includes(style)) {
+      return '';
+    }
     let styleResult = '';
     Object.keys(style).forEach((key) => {
       if (key !== 'border' && style[key]) {
@@ -158,7 +172,8 @@ const codeView = (props) => {
       if (item.nodeProps) {
         const nodeProps = item.nodeProps;
         Object.keys(nodeProps).forEach((key) => {
-          const func = JSON.parse(nodeProps[key].renderFunc);
+          // const func = JSON.parse(nodeProps[key].renderFunc);
+          const func = imgRenderFunc;
           const params = nodeProps[key].params;
           const reactDomParams = func(params);
           const domContent = renderReactDom(reactDomParams);
@@ -171,6 +186,10 @@ const codeView = (props) => {
         ...item.props,
         ...ReactNodeProps,
       };
+      // 兼容 button 的 icon 图标为空时，有icon占位符的问题
+      if (Object.prototype.hasOwnProperty.call(props, 'icon')) {
+        props.icon = props.icon || false;
+      }
       if (item.needDiv === true) {
         return (
           <div data-id={indexs} key={_.uniqueId()}>
@@ -187,7 +206,7 @@ const codeView = (props) => {
     const payload = {
       code: code,
     };
-    const apiUrl = '/api/page/zip';
+    const apiUrl = 'http://localhost:3000/api/page/zip';
     fetch(apiUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -203,6 +222,9 @@ const codeView = (props) => {
         a.download = filename;
         a.click();
         window.URL.revokeObjectURL(url);
+      })
+      .catch((err) => {
+        MsgService.error(err);
       });
   };
 
@@ -214,7 +236,7 @@ const codeView = (props) => {
     <div style={{ display: 'flex', flexDirection: 'row', margin: '20px 40px' }}>
       <div>
         <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
-          <span onClick={() => getZip()}>生成代码压缩包</span>
+          <a onClick={() => getZip()}>生成代码压缩包</a>
           <CopyToClipboard
             text={code}
             onCopy={() => {
@@ -222,14 +244,14 @@ const codeView = (props) => {
             }}
             style={{ margin: '0 20px', textAlign: 'right' }}
           >
-            <span>复制代码</span>
+            <a>复制代码</a>
           </CopyToClipboard>
         </div>
         <MonacoEditor
           width="600"
           height="667"
           language="javascript"
-          theme="vs-light"
+          theme="vs-dark"
           value={code}
           options={options}
         ></MonacoEditor>

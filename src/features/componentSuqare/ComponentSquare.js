@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { connect } from 'dva';
 import { Tabs, Empty } from 'antd';
 import Card from '../components/Card';
+import './ComponentSquare.less';
 
 const { TabPane } = Tabs;
 

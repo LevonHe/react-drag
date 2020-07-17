@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
+import intl from 'react-intl-universal';
 import { connect } from 'dva';
 import { Table, Divider, Popconfirm, Icon, message } from 'antd';
 import { APPLICATION_TYPE } from '@/util/businessTypes';
+import LocalDateFormat from '@/util/LocalDateFormat';
 
 const Application = (props) => {
-  const { list, loading, popLoading, dispatch } = props;
+  const { list, dispatch } = props;
 
+  const [loading, setLoading] = useState(false);
+  const [popLoading, setPopLoading] = useState(false);
   const [current, setCurrent] = useState(1);
   const [pageSize, setPageSize] = useState(10);
   const [selectId, setSelectId] = useState(null);
@@ -28,7 +32,16 @@ const Application = (props) => {
     {
       title: '当前状态',
       dataIndex: 'apply_status',
-      render: (text) => APPLICATION_TYPE[text],
+      render: (text) => {
+        const st = APPLICATION_TYPE.find((i) => i.key === text);
+        const value = st ? intl.get(st.value) : text;
+        return value;
+      },
+    },
+    {
+      title: '创建时间',
+      dataIndex: 'create_time',
+      render: (text) => LocalDateFormat.formatLocalDateTime(new Date(text).getTime()),
     },
     {
       title: '操作',
@@ -71,8 +84,11 @@ const Application = (props) => {
   }, []);
 
   const getList = () => {
+    setLoading(true);
     dispatch({
       type: 'application/getApplicationList',
+    }).finally(() => {
+      setLoading(false);
     });
   };
 
@@ -91,6 +107,7 @@ const Application = (props) => {
     if (popLoading) {
       return;
     }
+    setPopLoading(true);
     dispatch({
       type: 'application/replyApplication',
       payload: {
@@ -106,6 +123,9 @@ const Application = (props) => {
       .catch((err) => {
         message.error(err);
         handlePop(null, false, 'ok');
+      })
+      .finally(() => {
+        setPopLoading(false);
       });
   };
 
@@ -131,8 +151,6 @@ const Application = (props) => {
   );
 };
 
-export default connect(({ application, loading }) => ({
+export default connect(({ application }) => ({
   list: application.list,
-  loading: loading.effects['application/getApplicationList'],
-  popLoading: loading.effects['application/replyApplication'],
 }))(Application);

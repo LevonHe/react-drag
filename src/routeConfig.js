@@ -23,7 +23,7 @@ const routes = [
   {
     path: '/',
     component: Layout,
-    // canActive: true,
+    canActive: true,
     childRoutes: [...childRoutes, { path: '*', name: 'Page not found', component: PageNotFound }].filter(
       (r) => r.component || (r.childRoutes && r.childRoutes.length > 0)
     ),
